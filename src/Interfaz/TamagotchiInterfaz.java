@@ -6,10 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TamagotchiInterfaz extends JFrame {
+import PersistenciaDatos.Tamagotchi;
+import PersistenciaDatos.Manejo_Archivos;
+
+public class TamagotchiInterfaz extends JFrame implements Runnable {
 
     // Iconos
     ImageIcon img = new ImageIcon(Objects.requireNonNull(getClass().getResource("/IconosTamagotchi/IconoPrincipal.png")));
@@ -22,7 +28,7 @@ public class TamagotchiInterfaz extends JFrame {
     ImageIcon img7 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/IconosTamagotchi/Goku_Level.png")));
 
     // JLabel
-    private JLabel NivelLabel;
+    public JLabel NivelLabel;
     private JLabel statusimagen;
     private JLabel EatLabel;
     private JLabel DormirLabel;
@@ -39,12 +45,23 @@ public class TamagotchiInterfaz extends JFrame {
     private JButton DormirButton;
     private JButton JugarButton;
     private JButton BañarButton;
+    private JButton volverButton;
 
     // JProgressBar
-    private JProgressBar hambre;
-    private JProgressBar felicidad;
-    private JProgressBar suciedad;
-    private JProgressBar energia;
+    public JProgressBar hambre;
+    public JProgressBar felicidad;
+    public JProgressBar suciedad;
+    public JProgressBar energia;
+
+    // Constructores
+    Manejo_Archivos manejoArchivos = new Manejo_Archivos();
+    Tamagotchi ruta = new Tamagotchi();
+    // Variables
+    int valueHambre;
+    int valueSuciedad;
+    int valueEnergia;
+    int valuefelicidad;
+    private static final String RUTA = "src/Archivos_Bin"; // Ruta donde se crearán los archivos
 
     public TamagotchiInterfaz() {
 
@@ -54,7 +71,7 @@ public class TamagotchiInterfaz extends JFrame {
         setLayout(null);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.BLUE);
+        getContentPane().setBackground(new Color(229, 124, 35));
         setIconImage(img.getImage());
 
         //Configuración JProgressBar
@@ -62,30 +79,26 @@ public class TamagotchiInterfaz extends JFrame {
         hambre.setForeground(Color.red);
         hambre.setBounds(20,20,130,20);
         hambre.setStringPainted(true); // habilitación para llenar la barra de progreso
-        hambre.setValue(10); // valor por defecto de la barra de progreso
 
         felicidad = new JProgressBar(0,100);
         felicidad.setForeground(Color.green);
         felicidad.setBounds(20,60,130,20);
         felicidad.setStringPainted(true);
-        felicidad.setValue(50);
 
         suciedad = new JProgressBar(0,100);
         suciedad.setForeground(Color.pink);
         suciedad.setBounds(220,20,130,20);
         suciedad.setStringPainted(true);
-        suciedad.setValue(10);
 
         energia = new JProgressBar(0,100);
         energia.setForeground(Color.orange);
         energia.setBounds(220,60,130,20);
         energia.setStringPainted(true);
-        energia.setValue(50);
 
         // Configuración Label
         NivelLabel = new JLabel("0");
-        NivelLabel.setForeground(Color.white);
-        NivelLabel.setBounds(175,20,40,40);
+        NivelLabel.setForeground(Color.orange);
+        NivelLabel.setBounds(170,20,50,40);
         NivelLabel.setFont(new Font("Arial", Font.BOLD, 44));
 
         statusimagen = new JLabel();
@@ -96,66 +109,72 @@ public class TamagotchiInterfaz extends JFrame {
         statusimagen.setBorder(new RoundedBorder(10));
 
         HambreLabel = new JLabel("Hambre");
-        HambreLabel.setForeground(Color.white);
+        HambreLabel.setForeground(Color.black);
         HambreLabel.setBounds(60,1,130,20);
 
         felicidadLabel = new JLabel("Felicidad");
-        felicidadLabel.setForeground(Color.white);
+        felicidadLabel.setForeground(Color.black);
         felicidadLabel.setBounds(60,40,130,20);
 
         suciedadLabel = new JLabel("Suciedad");
-        suciedadLabel.setForeground(Color.white);
+        suciedadLabel.setForeground(Color.black);
         suciedadLabel.setBounds(260,1,130,20);
 
         energiaLabel = new JLabel("Energía");
-        energiaLabel.setForeground(Color.white);
+        energiaLabel.setForeground(Color.black);
         energiaLabel.setBounds(260,40,130,20);
 
         LevelLabel = new JLabel("Nivel");
-        LevelLabel.setForeground(Color.white);
+        LevelLabel.setForeground(Color.orange);
         LevelLabel.setFont(new Font("Arial", Font.BOLD, 15));
         LevelLabel.setBounds(170,50,40,40);
 
         EatLabel = new JLabel("Comer");
-        EatLabel.setForeground(Color.white);
+        EatLabel.setForeground(Color.black);
         EatLabel.setBounds(30,365,40,40);
 
         DormirLabel = new JLabel("Dormir");
-        DormirLabel.setForeground(Color.white);
+        DormirLabel.setForeground(Color.black);
         DormirLabel.setBounds(210,365,40,40);
 
         JugarLabel = new JLabel("Jugar");
-        JugarLabel.setForeground(Color.white);
+        JugarLabel.setForeground(Color.black);
         JugarLabel.setBounds(120,365,40,40);
 
         BañarLabel = new JLabel("Bañar");
-        BañarLabel.setForeground(Color.white);
+        BañarLabel.setForeground(Color.black);
         BañarLabel.setBounds(300,365,40,40);
 
         // Configuración Button
         EatButton = new JButton();
         EatButton.setBounds(35,400,40,40);
-        EatButton.setBackground(Color.blue);
+        EatButton.setBackground(Color.white);
         EatButton.setForeground(Color.black);
         EatButton.setBorder(new RoundedBorder(100)); // Aquí se establece el radio del botón
 
         DormirButton = new JButton();
         DormirButton.setBounds(215,400,40,40);
-        DormirButton.setBackground(Color.blue);
+        DormirButton.setBackground(Color.white);
         DormirButton.setForeground(Color.black);
         DormirButton.setBorder(new RoundedBorder(100));
 
         JugarButton = new JButton();
         JugarButton.setBounds(125,400,40,40);
-        JugarButton.setBackground(Color.blue);
+        JugarButton.setBackground(Color.white);
         JugarButton.setForeground(Color.black);
         JugarButton.setBorder(new RoundedBorder(100));
 
         BañarButton = new JButton();
         BañarButton.setBounds(305,400,40,40);
-        BañarButton.setBackground(Color.blue);
+        BañarButton.setBackground(Color.white);
         BañarButton.setForeground(Color.black);
         BañarButton.setBorder(new RoundedBorder(100));
+
+        volverButton = new JButton();
+        volverButton.setBounds(10,200,40,40);
+        volverButton.setBackground(Color.red);
+        volverButton.setForeground(Color.black);
+        volverButton.setBorder(new RoundedBorder(100));
 
         EatButton.addActionListener(new ActionListener() { // escucha para alimentar
             public void actionPerformed(ActionEvent e) {
@@ -203,6 +222,17 @@ public class TamagotchiInterfaz extends JFrame {
                 }
             }
         });
+        volverButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String rutaActual = "src/Archivos_Bin/" + obtenerUltimoArchivoBin();
+                System.out.println(rutaActual);
+                ruta.setRuta(rutaActual);
+                guardarTamagochi();
+                TamagotchiMenu menu = new TamagotchiMenu();
+                setVisible(false);
+                menu.setVisible(true);
+            }
+        });
 
         add(EatButton);
         add(EatLabel);
@@ -223,22 +253,24 @@ public class TamagotchiInterfaz extends JFrame {
         add(suciedadLabel);
         add(felicidadLabel);
         add(energiaLabel);
+        add(volverButton);
 
         tiempo();
         tiempo_Level();
+        run();
     }
 
     public void tiempo(){
-        // inicializo timer en 5000 ms
-        Timer timer = new Timer(5000, e -> {
-            // Obtengo los valores de los barras de progreso
-            int valueHambre = hambre.getValue();
-            int valueSuciedad = suciedad.getValue();
-            int valueEnergia = energia.getValue();
-            int valuefelicidad = felicidad.getValue();
+        // inicializo timer en 10000 ms
+        Timer timer = new Timer(10000, e -> {
+            // Obtengo los valores de las barras de progreso
+            valueHambre = hambre.getValue();
+            valueSuciedad = suciedad.getValue();
+            valueEnergia = energia.getValue();
+            valuefelicidad = felicidad.getValue();
 
-            // condicón para morir
-            if(valueHambre > 80 & valueSuciedad > 80 & valueEnergia < 20 & valuefelicidad < 20){
+            // condición para morir
+            if(valueHambre > 80 & valueSuciedad > 80 | valueEnergia < 20 & valuefelicidad < 20){
                 statusimagen.setIcon(img6);
                 EatButton.setEnabled(false);
                 DormirButton.setEnabled(false);
@@ -248,7 +280,7 @@ public class TamagotchiInterfaz extends JFrame {
             }else {
                 statusimagen.setIcon(img1);
 
-                //  Control de los evento de la barra de estado
+                //  Control de los eventos de la barra de estado
                 if (valueHambre <= hambre.getMaximum()) {
                     if (valueHambre >= hambre.getMinimum()) {
                         hambre.setValue(valueHambre + 10);
@@ -280,7 +312,7 @@ public class TamagotchiInterfaz extends JFrame {
     public void tiempo_Level(){ // incremento del nivel
         AtomicInteger Nivel = new AtomicInteger(); // contador
         // timer de 10000 ms
-        Timer timer = new Timer(12000, e ->{
+        Timer timer = new Timer(10000, e ->{
             int valueHambre = hambre.getValue();
             int valueSuciedad = suciedad.getValue();
             int valueEnergia = energia.getValue();
@@ -294,5 +326,31 @@ public class TamagotchiInterfaz extends JFrame {
             }
         });
         timer.start(); // inicio del timer
+    }
+    public static String obtenerUltimoArchivoBin() {
+        File directorio = new File(RUTA);
+        if (!directorio.exists()) {
+            System.out.println("El directorio no existe.");
+            return null;
+        }
+
+        File[] archivos = directorio.listFiles((dir, name) -> name.toLowerCase().endsWith(".bin"));
+        if (archivos == null || archivos.length == 0) {
+            System.out.println("No se encontraron archivos .bin en la carpeta.");
+            return null;
+        }
+
+        Arrays.sort(archivos, Comparator.comparingLong(File::lastModified)); // Ordenar por marca de tiempo
+
+        File archivoMasReciente = archivos[archivos.length - 1];
+        return archivoMasReciente.getName();
+    }
+
+    @Override
+    public void run() {
+        Timer autoGuardado = new Timer(120000, e ->{
+            guardarTamagochi();
+        });
+        autoGuardado.start();
     }
 }

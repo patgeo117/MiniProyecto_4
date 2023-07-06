@@ -3,21 +3,39 @@ package PersistenciaDatos;
 import java.io.*;
 
 public class Manejo_Archivos {
-    public void leerObjeto(String RUTA) {
-        /*String rutaArchivo = "src/Archivos_Bin/Libros.bin";
-        Object[][] objetos = null;
+    public Tamagotchi leerDatos(String RUTA)  {
+        Tamagotchi data = null;
         try {
-
-            FileInputStream fileInputStream = new FileInputStream(rutaArchivo);
+            FileInputStream fileInputStream = new FileInputStream(RUTA);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            objetos = (Object[][]) objectInputStream.readObject();
+            if(objectInputStream != null) {
 
-            objectInputStream.close();
-            fileInputStream.close();
-        } catch (IOException | ClassNotFoundException e) {
+                data = (Tamagotchi) objectInputStream.readObject();
+
+                fileInputStream.close();
+                objectInputStream.close();
+            }
+        }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
-        }*/
+        }
+        return data;
+    }
+
+    public void escribirDatos(Tamagotchi dato, String RUTA){
+        try{
+            FileOutputStream fileOutputStream = new FileOutputStream(RUTA);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            if(objectOutputStream != null){
+                objectOutputStream.writeObject(dato);
+
+                fileOutputStream.close();
+                objectOutputStream.close();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public static void crearArchivoBin(String RUTA) {
