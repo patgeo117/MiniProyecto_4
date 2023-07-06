@@ -255,6 +255,7 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         add(energiaLabel);
         add(volverButton);
 
+        // HILOS
         tiempo();
         tiempo_Level();
         run();
