@@ -309,6 +309,16 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         timer.start(); // incio el timer
     }
 
+    public void  guardarTamagochi(){
+
+        String nivel = NivelLabel.getText();
+
+        // obtengo los datos del bibliotecario;
+        Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad , nivel);
+
+        manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta());
+    }
+
     public void tiempo_Level(){ // incremento del nivel
         AtomicInteger Nivel = new AtomicInteger(); // contador
         // timer de 10000 ms
@@ -320,9 +330,17 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
             // validación para aumentar el nivel
             if(valueHambre < 20 & valueSuciedad < 20 & valueEnergia > 80 & valuefelicidad > 80){
-                Nivel.set(Nivel.get() + 1);
-                NivelLabel.setText(String.valueOf((Nivel.get())));
-                statusimagen.setIcon(img7);
+                if(Nivel.get() < 5) {
+                    Nivel.set(Nivel.get() + 1);
+                    NivelLabel.setText(String.valueOf((Nivel.get())));
+                    statusimagen.setIcon(img7);
+                }else{
+                    NivelLabel.setText("W");
+                    EatButton.setEnabled(false);
+                    DormirButton.setEnabled(false);
+                    JugarButton.setEnabled(false);
+                    BañarButton.setEnabled(false);
+                }
             }
         });
         timer.start(); // inicio del timer
