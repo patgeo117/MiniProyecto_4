@@ -1,30 +1,29 @@
 package PersistenciaDatos;
 
-import javax.swing.*;
 import java.io.Serializable;
 
 
 public class Tamagotchi implements Serializable {
-    private int valueHambre;
-    private int valueSuciedad;
-    private int valueEnergia;
-    private int valuefelicidad;
-    private String ruta;
-    private String Level;
+    private static int valueHambre;
+    private static int valueSuciedad;
+    private static int valueEnergia;
+    private static int valuefelicidad;
+    private static String ruta;
+    private static String Level;
 
     public Tamagotchi(){
 
     }
     public Tamagotchi(int Hambre, int Energia, int Felicidad, int Suciedad,String level){
-        this.valueHambre = Hambre;
-        this.valueEnergia = Energia;
-        this.valuefelicidad = Felicidad;
-        this.valueSuciedad = Suciedad;
-        this.Level = level;
+        valueHambre = Hambre;
+        valueEnergia = Energia;
+        valuefelicidad = Felicidad;
+        valueSuciedad = Suciedad;
+        Level = level;
     }
 
     public void setRuta(String ruta){
-        this.ruta = ruta;
+        Tamagotchi.ruta = ruta;
     }
 
     public String getLevel(){

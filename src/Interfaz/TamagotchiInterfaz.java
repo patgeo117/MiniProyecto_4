@@ -4,11 +4,6 @@ import Filtro.RoundedBorder;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,23 +24,24 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
     // JLabel
     public JLabel NivelLabel;
-    private JLabel statusimagen;
-    private JLabel EatLabel;
-    private JLabel DormirLabel;
-    private JLabel JugarLabel;
-    private JLabel BañarLabel;
-    private JLabel HambreLabel;
-    private JLabel felicidadLabel;
-    private JLabel suciedadLabel;
-    private JLabel energiaLabel;
-    private JLabel LevelLabel;
+    public JLabel VolverLabel;
+    public JLabel statusimagen;
+    public JLabel EatLabel;
+    public JLabel DormirLabel;
+    public JLabel JugarLabel;
+    public JLabel BanarLabel;
+    public JLabel HambreLabel;
+    public JLabel felicidadLabel;
+    public JLabel suciedadLabel;
+    public JLabel energiaLabel;
+    public JLabel LevelLabel;
 
     // JButton
-    private JButton EatButton;
-    private JButton DormirButton;
-    private JButton JugarButton;
-    private JButton BañarButton;
-    private JButton volverButton;
+    public JButton EatButton;
+    public JButton DormirButton;
+    public JButton JugarButton;
+    public JButton BanarButton;
+    public JButton volverButton;
 
     // JProgressBar
     public JProgressBar hambre;
@@ -56,12 +52,12 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
     // Constructores
     Manejo_Archivos manejoArchivos = new Manejo_Archivos();
     Tamagotchi ruta = new Tamagotchi();
+
     // Variables
     int valueHambre;
     int valueSuciedad;
     int valueEnergia;
     int valuefelicidad;
-    private static final String RUTA = "src/Archivos_Bin"; // Ruta donde se crearán los archivos
 
     public TamagotchiInterfaz() {
 
@@ -96,7 +92,11 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         energia.setStringPainted(true);
 
         // Configuración Label
-        NivelLabel = new JLabel("0");
+        VolverLabel = new JLabel("Volver");
+        VolverLabel.setForeground(Color.black);
+        VolverLabel.setBounds(10,170,100,40);
+
+        NivelLabel = new JLabel();
         NivelLabel.setForeground(Color.orange);
         NivelLabel.setBounds(170,20,50,40);
         NivelLabel.setFont(new Font("Arial", Font.BOLD, 44));
@@ -141,9 +141,9 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         JugarLabel.setForeground(Color.black);
         JugarLabel.setBounds(120,365,40,40);
 
-        BañarLabel = new JLabel("Bañar");
-        BañarLabel.setForeground(Color.black);
-        BañarLabel.setBounds(300,365,40,40);
+        BanarLabel = new JLabel("Bañar");
+        BanarLabel.setForeground(Color.black);
+        BanarLabel.setBounds(300,365,40,40);
 
         // Configuración Button
         EatButton = new JButton();
@@ -164,11 +164,11 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         JugarButton.setForeground(Color.black);
         JugarButton.setBorder(new RoundedBorder(100));
 
-        BañarButton = new JButton();
-        BañarButton.setBounds(305,400,40,40);
-        BañarButton.setBackground(Color.white);
-        BañarButton.setForeground(Color.black);
-        BañarButton.setBorder(new RoundedBorder(100));
+        BanarButton = new JButton();
+        BanarButton.setBounds(305,400,40,40);
+        BanarButton.setBackground(Color.white);
+        BanarButton.setForeground(Color.black);
+        BanarButton.setBorder(new RoundedBorder(100));
 
         volverButton = new JButton();
         volverButton.setBounds(10,200,40,40);
@@ -176,62 +176,56 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         volverButton.setForeground(Color.black);
         volverButton.setBorder(new RoundedBorder(100));
 
-        EatButton.addActionListener(new ActionListener() { // escucha para alimentar
-            public void actionPerformed(ActionEvent e) {
-                int valueHambre = hambre.getValue(); // Obtengo el porcentaje de hambre
-                if (valueHambre < hambre.getMaximum()) { // hambre menor al maximo
-                    if(valueHambre > hambre.getMinimum()) { // Hambre mayor al minimo
-                        hambre.setValue(valueHambre - 10);
-                        statusimagen.setIcon(img5);
-                    }
+        // escucha para alimentar
+        EatButton.addActionListener(e -> {
+            int valueHambre = hambre.getValue(); // Obtengo el porcentaje de hambre
+            if (valueHambre < hambre.getMaximum()) { // hambre menor al maximo
+                if(valueHambre > hambre.getMinimum()) { // Hambre mayor al minimo
+                    hambre.setValue(valueHambre - 10);
+                    statusimagen.setIcon(img5);
                 }
             }
         });
 
-        DormirButton.addActionListener(new ActionListener() { // escucha para dormir
-            public void actionPerformed(ActionEvent e) {
-                int valueEnergia = energia.getValue();
-                if (valueEnergia < energia.getMaximum()) {
-                    if(valueEnergia > energia.getMinimum()) {
-                        energia.setValue(valueEnergia + 10);
-                        statusimagen.setIcon(img4);
-                    }
+        // escucha para dormir
+        DormirButton.addActionListener(e -> {
+            int valueEnergia = energia.getValue();
+            if (valueEnergia < energia.getMaximum()) {
+                if(valueEnergia > energia.getMinimum()) {
+                    energia.setValue(valueEnergia + 10);
+                    statusimagen.setIcon(img4);
                 }
             }
         });
 
-        JugarButton.addActionListener(new ActionListener() { // escucha para jugar
-            public void actionPerformed(ActionEvent e) {
-                int valuefelicidad = felicidad.getValue();
-                if (valuefelicidad < felicidad.getMaximum()) {
-                    if(valuefelicidad > felicidad.getMinimum()) {
-                        felicidad.setValue(valuefelicidad + 10);
-                        statusimagen.setIcon(img2);
-                    }
+        // escucha para jugar
+        JugarButton.addActionListener(e -> {
+            int valuefelicidad = felicidad.getValue();
+            if (valuefelicidad < felicidad.getMaximum()) {
+                if(valuefelicidad > felicidad.getMinimum()) {
+                    felicidad.setValue(valuefelicidad + 10);
+                    statusimagen.setIcon(img2);
                 }
             }
         });
-        BañarButton.addActionListener(new ActionListener() { // escucha para bañar
-            public void actionPerformed(ActionEvent e) {
-                int valueSuciedad = suciedad.getValue();
-                if (valueSuciedad < suciedad.getMaximum()) {
-                    if(valueSuciedad > suciedad.getMinimum()) {
-                        suciedad.setValue(valueSuciedad - 10);
-                        statusimagen.setIcon(img3);
-                    }
+        // escucha para bañar
+        BanarButton.addActionListener(e -> {
+            int valueSuciedad = suciedad.getValue();
+            if (valueSuciedad < suciedad.getMaximum()) {
+                if(valueSuciedad > suciedad.getMinimum()) {
+                    suciedad.setValue(valueSuciedad - 10);
+                    statusimagen.setIcon(img3);
                 }
             }
         });
-        volverButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String rutaActual = "src/Archivos_Bin/" + obtenerUltimoArchivoBin();
-                System.out.println(rutaActual);
-                ruta.setRuta(rutaActual);
-                guardarTamagochi();
-                TamagotchiMenu menu = new TamagotchiMenu();
-                setVisible(false);
-                menu.setVisible(true);
-            }
+        volverButton.addActionListener(e -> {
+            guardarTamagochi();
+            String rutaActual = ruta.getRuta();
+            System.out.println(rutaActual);
+            ruta.setRuta(rutaActual);
+            TamagotchiMenu menu = new TamagotchiMenu();
+            setVisible(false);
+            menu.setVisible(true);
         });
 
         add(EatButton);
@@ -240,8 +234,8 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         add(DormirLabel);
         add(JugarButton);
         add(JugarLabel);
-        add(BañarButton);
-        add(BañarLabel);
+        add(BanarButton);
+        add(BanarLabel);
         add(statusimagen);
         add(suciedad);
         add(felicidad);
@@ -254,13 +248,23 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         add(felicidadLabel);
         add(energiaLabel);
         add(volverButton);
+        add(VolverLabel);
 
         // HILOS
+        run();
         tiempo();
         tiempo_Level();
-        run();
     }
 
+    public void  guardarTamagochi(){
+
+        String nivel = NivelLabel.getText();
+
+        // Obtengo los datos del Tamagotchi;
+        Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad, nivel);
+
+        manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta());
+    }
     public void tiempo(){
         // inicializo timer en 10000 ms
         Timer timer = new Timer(10000, e -> {
@@ -272,14 +276,14 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
             // condición para morir
             if(valueHambre > 80 & valueSuciedad > 80 | valueEnergia < 20 & valuefelicidad < 20){
-                statusimagen.setIcon(img6);
-                EatButton.setEnabled(false);
+                statusimagen.setIcon(img6); // Se coloca la imagen de muerto
+                EatButton.setEnabled(false); // Se deshabilita los botones
                 DormirButton.setEnabled(false);
                 JugarButton.setEnabled(false);
-                BañarButton.setEnabled(false);
+                BanarButton.setEnabled(false);
 
             }else {
-                statusimagen.setIcon(img1);
+                statusimagen.setIcon(img1); // Imagen por defecto se coloca cada 10 seg
 
                 //  Control de los eventos de la barra de estado
                 if (valueHambre <= hambre.getMaximum()) {
@@ -310,20 +314,11 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         timer.start(); // incio el timer
     }
 
-    public void  guardarTamagochi(){
-
-        String nivel = NivelLabel.getText();
-
-        // obtengo los datos del bibliotecario;
-        Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad , nivel);
-
-        manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta());
-    }
-
     public void tiempo_Level(){ // incremento del nivel
-        AtomicInteger Nivel = new AtomicInteger(); // contador
         // timer de 10000 ms
-        Timer timer = new Timer(10000, e ->{
+        Timer timer = new Timer(15000, e ->{
+            AtomicInteger nivel = new AtomicInteger(Integer.parseInt(NivelLabel.getText())); // contador
+
             int valueHambre = hambre.getValue();
             int valueSuciedad = suciedad.getValue();
             int valueEnergia = energia.getValue();
@@ -331,45 +326,25 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
             // validación para aumentar el nivel
             if(valueHambre < 20 & valueSuciedad < 20 & valueEnergia > 80 & valuefelicidad > 80){
-                if(Nivel.get() < 5) {
-                    Nivel.set(Nivel.get() + 1);
-                    NivelLabel.setText(String.valueOf((Nivel.get())));
+                if(nivel.get() < 5) {
                     statusimagen.setIcon(img7);
                 }else{
-                    NivelLabel.setText("W");
+                    LevelLabel.setText("Winner");
                     EatButton.setEnabled(false);
                     DormirButton.setEnabled(false);
                     JugarButton.setEnabled(false);
-                    BañarButton.setEnabled(false);
+                    BanarButton.setEnabled(false);
                 }
+                nivel.getAndIncrement();
+                NivelLabel.setText(String.valueOf(nivel));
             }
         });
         timer.start(); // inicio del timer
     }
-    public static String obtenerUltimoArchivoBin() {
-        File directorio = new File(RUTA);
-        if (!directorio.exists()) {
-            System.out.println("El directorio no existe.");
-            return null;
-        }
-
-        File[] archivos = directorio.listFiles((dir, name) -> name.toLowerCase().endsWith(".bin"));
-        if (archivos == null || archivos.length == 0) {
-            System.out.println("No se encontraron archivos .bin en la carpeta.");
-            return null;
-        }
-
-        Arrays.sort(archivos, Comparator.comparingLong(File::lastModified)); // Ordenar por marca de tiempo
-
-        File archivoMasReciente = archivos[archivos.length - 1];
-        return archivoMasReciente.getName();
-    }
 
     @Override
     public void run() {
-        Timer autoGuardado = new Timer(120000, e ->{
-            guardarTamagochi();
-        });
+        Timer autoGuardado = new Timer(120000, e -> guardarTamagochi());
         autoGuardado.start();
     }
 }
