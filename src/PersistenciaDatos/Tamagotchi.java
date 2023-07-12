@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 
 public class Tamagotchi implements Serializable {
-    private static int valueHambre;
-    private static int valueSuciedad;
-    private static int valueEnergia;
-    private static int valuefelicidad;
+    private int valueHambre;
+    private int valueSuciedad;
+    private int valueEnergia;
+    private int valuefelicidad;
     private static String ruta;
-    private static String Level;
+    private String Level;
 
     public Tamagotchi(){
 

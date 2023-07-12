@@ -218,6 +218,7 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
                 }
             }
         });
+        run();
         volverButton.addActionListener(e -> {
             guardarTamagochi();
             String rutaActual = ruta.getRuta();
@@ -251,23 +252,23 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         add(VolverLabel);
 
         // HILOS
-        run();
+
         tiempo();
         tiempo_Level();
     }
 
     public void  guardarTamagochi(){
-
         String nivel = NivelLabel.getText();
 
         // Obtengo los datos del Tamagotchi;
         Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad, nivel);
+        //String ruta = "src/Archivos_Bin/partida1.bin";
 
         manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta());
     }
     public void tiempo(){
         // inicializo timer en 10000 ms
-        Timer timer = new Timer(10000, e -> {
+        Timer timer = new Timer(5000, e -> {
             // Obtengo los valores de las barras de progreso
             valueHambre = hambre.getValue();
             valueSuciedad = suciedad.getValue();

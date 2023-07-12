@@ -83,36 +83,30 @@ public class TamagotchiMenu extends JFrame implements Runnable {
         });
 
         CargarPartidaButton.addActionListener(e -> {
-            String NombrePartida = (String) CargarPartidaButton.getSelectedItem(); // obtengo partida seleccionada
+            String NombrePartida = (String) CargarPartidaButton.getSelectedItem();
             int item = CargarPartidaButton.getSelectedIndex();
 
-            if(Objects.equals(NombrePartida, "Seleccionar")){
-                CargarPartidaButton.setSelectedIndex(0); // Ignorar el ítem
+            if (Objects.equals(NombrePartida, "Seleccionar")) {
+                CargarPartidaButton.setSelectedIndex(0);
             }
             if (item >= 1) {
-                String ruta = "src/Archivos_Bin/" + NombrePartida; // obtengo el archivo de la partida
-                datos.setRuta(ruta); ///enviamos la ruta a la instancia
-
+                String ruta = "src/Archivos_Bin/" + NombrePartida;
+                rutatamagochi.setRuta(ruta);
                 Tamagotchi tamagotchi = manejoArchivos.leerDatos(ruta);
 
-                System.out.println(ruta);
                 TamagotchiInterfaz tamagotchiInterface = new TamagotchiInterfaz();
 
-                tamagotchiInterface.setVisible(true);
+                tamagotchiInterface.energia.setValue(tamagotchi.getValueEnergia());
+                tamagotchiInterface.hambre.setValue(tamagotchi.getValueHambre());
+                tamagotchiInterface.felicidad.setValue(tamagotchi.getValuefelicidad());
+                tamagotchiInterface.suciedad.setValue(tamagotchi.getValueSuciedad());
+                tamagotchiInterface.NivelLabel.setText(String.valueOf(tamagotchi.getLevel()));
+
                 setVisible(false);
-
-                Timer timer = new Timer(100, e1 -> {
-                    tamagotchiInterface.energia.setValue(tamagotchi.getValueEnergia());
-                    tamagotchiInterface.hambre.setValue(tamagotchi.getValueHambre());
-                    tamagotchiInterface.felicidad.setValue(tamagotchi.getValuefelicidad());
-                    tamagotchiInterface.suciedad.setValue(tamagotchi.getValueSuciedad());
-                    tamagotchiInterface.NivelLabel.setText(String.valueOf(tamagotchi.getLevel()));
-                });
-                timer.start();
-
-                timer.stop();
+                tamagotchiInterface.setVisible(true);
             }
         });
+
 
         // Agregar ambos botones al contenedor
         add(CrearPartidaButton);
@@ -120,8 +114,8 @@ public class TamagotchiMenu extends JFrame implements Runnable {
         add(imagenTamagotchi);
 
         run();
-
     }
+
 
     // Método encargado de obtener todas las partidas guardadas
     public static String[] obtenerListaArchivosBin(){
@@ -164,12 +158,12 @@ public class TamagotchiMenu extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        Set<String> elementosAgregados = new HashSet<>();
-        Timer timer = new Timer(1000, e -> {
+        Set<String> elementosAgregados = new HashSet<>(); // Creo una lista de items
+        Timer timer = new Timer(1000, e -> { // se ejecuta cada segundo
             for (String elemento : obtenerListaArchivosBin()) {
                 if (!elementosAgregados.contains(elemento)) {
-                    CargarPartidaButton.addItem(elemento);
-                    elementosAgregados.add(elemento);
+                    CargarPartidaButton.addItem(elemento); // cargo los item de las partidas creadas al comboBox
+                    elementosAgregados.add(elemento); // agrego el elemento
                 }
             }
         });
