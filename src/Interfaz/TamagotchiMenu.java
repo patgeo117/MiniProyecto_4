@@ -33,9 +33,9 @@ public class TamagotchiMenu extends JFrame implements Runnable {
 
     // constructores
     Manejo_Archivos manejoArchivos = new Manejo_Archivos();
-   Tamagotchi datos = new Tamagotchi();
+    Tamagotchi rutatamagochi = new Tamagotchi();
 
-    TamagotchiMenu(){
+    public TamagotchiMenu(){
         // Configuración Ventana
         setTitle("Tamagotchi");
         setSize(300, 400);
@@ -76,7 +76,7 @@ public class TamagotchiMenu extends JFrame implements Runnable {
             tamagotchiInterface.energia.setValue(50);
             tamagotchiInterface.NivelLabel.setText("0");
             String rutaActual = "src/Archivos_Bin/" + obtenerUltimoArchivoBin();
-            datos.setRuta(rutaActual);
+            rutatamagochi.setRuta(rutaActual);
 
             tamagotchiInterface.setVisible(true);
             setVisible(false);
@@ -137,6 +137,7 @@ public class TamagotchiMenu extends JFrame implements Runnable {
         }
         return listaArchivos.toArray(new String[0]);
     }
+
     public static String obtenerUltimoArchivoBin() {
         File directorio = new File(RUTA);
         if (!directorio.exists()) {

@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Manejo_Archivos {
     public Tamagotchi leerDatos(String RUTA)  { // Método para leer los Datos
-        Tamagotchi data = null;
+        Tamagotchi data = new Tamagotchi();
         try {
             FileInputStream fileInputStream = new FileInputStream(RUTA);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);

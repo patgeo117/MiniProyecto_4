@@ -14,7 +14,8 @@ public class Tamagotchi implements Serializable {
     public Tamagotchi(){
 
     }
-    public Tamagotchi(int Hambre, int Energia, int Felicidad, int Suciedad,String level){
+    //Sobre cada de constructores
+    public Tamagotchi(int Hambre, int Energia, int Felicidad, int Suciedad, String level){
         valueHambre = Hambre;
         valueEnergia = Energia;
         valuefelicidad = Felicidad;
@@ -22,8 +23,8 @@ public class Tamagotchi implements Serializable {
         Level = level;
     }
 
-    public void setRuta(String ruta){
-        Tamagotchi.ruta = ruta;
+    public void setRuta(String rutas){
+        Tamagotchi.ruta = rutas;
     }
 
     public String getLevel(){

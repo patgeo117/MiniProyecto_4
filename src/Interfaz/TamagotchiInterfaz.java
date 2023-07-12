@@ -220,8 +220,8 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         });
         run();
         volverButton.addActionListener(e -> {
-            guardarTamagochi();
             String rutaActual = ruta.getRuta();
+            guardarTamagochi();
             System.out.println(rutaActual);
             ruta.setRuta(rutaActual);
             TamagotchiMenu menu = new TamagotchiMenu();
@@ -259,13 +259,18 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
     public void  guardarTamagochi(){
         String nivel = NivelLabel.getText();
+        int valueHambre = hambre.getValue();
+        int valueSuciedad = suciedad.getValue();
+        int valueEnergia = energia.getValue();
+        int valuefelicidad = felicidad.getValue();
 
         // Obtengo los datos del Tamagotchi;
         Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad, nivel);
         //String ruta = "src/Archivos_Bin/partida1.bin";
 
-        manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta());
+        manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta() );
     }
+
     public void tiempo(){
         // inicializo timer en 10000 ms
         Timer timer = new Timer(5000, e -> {
@@ -330,7 +335,7 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
                 if(nivel.get() < 5) {
                     statusimagen.setIcon(img7);
                 }else{
-                    LevelLabel.setText("Winner");
+                    LevelLabel.setText("W");
                     EatButton.setEnabled(false);
                     DormirButton.setEnabled(false);
                     JugarButton.setEnabled(false);
