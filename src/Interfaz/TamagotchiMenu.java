@@ -35,7 +35,7 @@ public class TamagotchiMenu extends JFrame implements Runnable {
     Manejo_Archivos manejoArchivos = new Manejo_Archivos();
     Tamagotchi rutatamagochi = new Tamagotchi();
 
-    public TamagotchiMenu(){
+    public TamagotchiMenu() {
         // Configuración Ventana
         setTitle("Tamagotchi");
         setSize(300, 400);
@@ -47,14 +47,14 @@ public class TamagotchiMenu extends JFrame implements Runnable {
 
         // Configuración Label
         imagenTamagotchi = new JLabel(img2);
-        imagenTamagotchi.setBounds(20,20,250,220);
+        imagenTamagotchi.setBounds(20, 20, 250, 220);
         imagenTamagotchi.setOpaque(true);
         imagenTamagotchi.setBackground(Color.white);
         imagenTamagotchi.setBorder(new RoundedBorder(10));
 
         // Configuración Botones
         CrearPartidaButton = new JButton("Crear Partida");
-        CrearPartidaButton.setBounds(70,250,150,40);
+        CrearPartidaButton.setBounds(70, 250, 150, 40);
         CrearPartidaButton.setBackground(Color.white);
         CrearPartidaButton.setForeground(Color.black);
         CrearPartidaButton.setBorder(new RoundedBorder(20));
@@ -117,11 +117,11 @@ public class TamagotchiMenu extends JFrame implements Runnable {
     }
 
     // Método encargado de obtener todas las partidas guardadas
-    public static String[] obtenerListaArchivosBin(){
+    public static String[] obtenerListaArchivosBin() {
         List<String> listaArchivos = new ArrayList<>();
 
         File directorio = new File(RUTA); // ruta de la carpeta
-        if(!directorio.exists()){
+        if (!directorio.exists()) {
             System.out.println("El directorio no existe.");
             return listaArchivos.toArray(new String[0]);
         }
