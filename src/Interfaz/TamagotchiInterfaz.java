@@ -59,6 +59,10 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
     int valueEnergia;
     int valuefelicidad;
 
+    // Timer
+    Timer timer;
+    Timer timer1;
+
     public TamagotchiInterfaz() {
 
         // Configuración Ventana
@@ -252,9 +256,9 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
         add(VolverLabel);
 
         // HILOS
-
-        tiempo();
+        run();
         tiempo_Level();
+
     }
 
     public void  guardarTamagochi(){
@@ -266,14 +270,13 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
 
         // Obtengo los datos del Tamagotchi;
         Tamagotchi newTamagochi = new Tamagotchi(valueHambre, valueEnergia, valuefelicidad, valueSuciedad, nivel);
-        //String ruta = "src/Archivos_Bin/partida1.bin";
 
         manejoArchivos.escribirDatos(newTamagochi, ruta.getRuta() );
     }
 
     public void tiempo(){
         // inicializo timer en 10000 ms
-        Timer timer = new Timer(5000, e -> {
+        timer = new Timer(5000, e -> {
             // Obtengo los valores de las barras de progreso
             valueHambre = hambre.getValue();
             valueSuciedad = suciedad.getValue();
@@ -281,13 +284,14 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
             valuefelicidad = felicidad.getValue();
 
             // condición para morir
-            if(valueHambre > 80 & valueSuciedad > 80 | valueEnergia < 20 & valuefelicidad < 20){
+            if(valueHambre >= 80 && valueSuciedad >= 80 || valueEnergia <= 20 && valuefelicidad <= 20){
                 statusimagen.setIcon(img6); // Se coloca la imagen de muerto
                 EatButton.setEnabled(false); // Se deshabilita los botones
                 DormirButton.setEnabled(false);
                 JugarButton.setEnabled(false);
                 BanarButton.setEnabled(false);
-
+                timer.stop();
+                timer1.stop();
             }else {
                 statusimagen.setIcon(img1); // Imagen por defecto se coloca cada 10 seg
 
@@ -316,36 +320,44 @@ public class TamagotchiInterfaz extends JFrame implements Runnable {
                     }
                 }
             }
+
         });
         timer.start(); // incio el timer
     }
 
     public void tiempo_Level(){ // incremento del nivel
-        // timer de 10000 ms
-        Timer timer = new Timer(15000, e ->{
-            AtomicInteger nivel = new AtomicInteger(Integer.parseInt(NivelLabel.getText())); // contador
+         // timer de 10000 ms
+         timer1 = new Timer(5000, e ->{
+             AtomicInteger nivel = new AtomicInteger(Integer.parseInt(NivelLabel.getText())); // contador
 
-            int valueHambre = hambre.getValue();
-            int valueSuciedad = suciedad.getValue();
-            int valueEnergia = energia.getValue();
-            int valuefelicidad = felicidad.getValue();
+             // Obtener datos actuales
+             valueHambre = hambre.getValue();
+             valueSuciedad = suciedad.getValue();
+             valueEnergia = energia.getValue();
+             valuefelicidad = felicidad.getValue();
 
-            // validación para aumentar el nivel
-            if(valueHambre < 20 & valueSuciedad < 20 & valueEnergia > 80 & valuefelicidad > 80){
-                if(nivel.get() < 5) {
-                    statusimagen.setIcon(img7);
-                }else{
-                    LevelLabel.setText("W");
-                    EatButton.setEnabled(false);
-                    DormirButton.setEnabled(false);
-                    JugarButton.setEnabled(false);
-                    BanarButton.setEnabled(false);
-                }
-                nivel.getAndIncrement();
-                NivelLabel.setText(String.valueOf(nivel));
-            }
-        });
-        timer.start(); // inicio del timer
+             if(nivel.get() >= 6){
+                 LevelLabel.setText("WINNER");
+                 LevelLabel.setBounds(155, 50, 60, 40); // se modifican las propiedades del Label para diseño
+                 EatButton.setEnabled(false);
+                 DormirButton.setEnabled(false);
+                 JugarButton.setEnabled(false);
+                 BanarButton.setEnabled(false);
+                 timer1.stop();
+                 timer.stop();
+             }
+
+             // validación para aumentar el nivel
+             if(valueHambre < 20 & valueSuciedad < 20 & valueEnergia > 80 & valuefelicidad > 80) {
+                 if (nivel.get() < 6) {
+                     statusimagen.setIcon(img7);
+                 }
+                 nivel.getAndIncrement();
+                 NivelLabel.setText(String.valueOf(nivel)); // le paso el contador al label
+             }
+         });
+         timer1.start(); // inicio del timer1
+         tiempo();
     }
 
     @Override
