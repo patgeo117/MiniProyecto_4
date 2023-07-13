@@ -113,7 +113,7 @@ public class TamagotchiMenu extends JFrame implements Runnable {
         add(CargarPartidaButton);
         add(imagenTamagotchi);
 
-        run();
+        run(); // cargar items del comboBox
     }
 
 
