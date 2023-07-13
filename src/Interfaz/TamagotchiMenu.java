@@ -116,7 +116,6 @@ public class TamagotchiMenu extends JFrame implements Runnable {
         run(); // cargar items del comboBox
     }
 
-
     // Método encargado de obtener todas las partidas guardadas
     public static String[] obtenerListaArchivosBin(){
         List<String> listaArchivos = new ArrayList<>();
@@ -135,7 +134,7 @@ public class TamagotchiMenu extends JFrame implements Runnable {
                 }
             }
         }
-        return listaArchivos.toArray(new String[0]);
+        return listaArchivos.toArray(new String[0]); // Se agrega a la última posición
     }
 
     public static String obtenerUltimoArchivoBin() {
